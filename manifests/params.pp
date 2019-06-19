@@ -214,7 +214,10 @@ class apache::params inherits ::apache::version {
       'fcgid'                 => 'mod_fcgid',
       'geoip'                 => 'mod_geoip',
       'intercept_form_submit' => 'mod_intercept_form_submit',
-      'ldap'                  => 'mod_ldap',
+      'ldap'                  => $::apache::version::distrelease ? {
+        '7'     => 'mod_ldap',
+        default => undef,
+      },
       'lookup_identity'       => 'mod_lookup_identity',
       'pagespeed'             => 'mod-pagespeed-stable',
       # NOTE: The passenger module isn't available on RH/CentOS without
@@ -363,7 +366,7 @@ class apache::params inherits ::apache::version {
       }
     } elsif ($::operatingsystem == 'Debian' and versioncmp($::operatingsystemrelease, '9') >= 0) {
       # Debian stretch uses a different dav_svn from Ubuntu Xenial
-      $php_version = '7.0'
+      $php_version = '7.3'
       $mod_packages = {
         'auth_cas'              => 'libapache2-mod-auth-cas',
         'auth_kerb'             => 'libapache2-mod-auth-kerb',
